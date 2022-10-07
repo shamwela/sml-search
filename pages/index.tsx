@@ -1,3 +1,4 @@
+import ResultArea from 'components/ResultArea'
 import { FormEvent, useState } from 'react'
 import { trpc } from 'utilities/trpc'
 
@@ -7,6 +8,8 @@ const Home = () => {
     refetchOnWindowFocus: false,
     enabled: false, // Disable this query from automatically running
   })
+  const results = data
+
   const submitHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const { elements } = event.currentTarget
@@ -27,21 +30,12 @@ const Home = () => {
         </form>
 
         <div>
-          {error instanceof Error ? (
-            <p>Error: {error.message}</p>
-          ) : isFetching ? (
-            <p>Loading...</p>
-          ) : data?.value.length === 0 ? (
-            <p>No results found for {query}.</p>
-          ) : (
-            data?.value.map(({ id, title, url }) => (
-              <div key={id}>
-                <a href={url} target='_blank' rel='noreferrer'>
-                  {title}
-                </a>
-              </div>
-            ))
-          )}
+          <ResultArea
+            error={error}
+            isFetching={isFetching}
+            results={results}
+            query={query}
+          />
         </div>
       </main>
     </>

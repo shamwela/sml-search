@@ -1,44 +1,42 @@
-import { initTRPC } from '@trpc/server'
+import { initTRPC, TRPCError } from '@trpc/server'
 import * as trpcNext from '@trpc/server/adapters/next'
 import { z } from 'zod'
 import axios from 'axios'
-
-type SearchValue = {
-  id: string
-  title: string
-  url: string
-}
-
-type WebSearchData = {
-  value: SearchValue[]
-}
 
 export const t = initTRPC.create()
 
 export const appRouter = t.router({
   search: t.procedure.input(z.string()).query(async ({ input }) => {
+    const key = process.env.API_KEY
+    const cx = process.env.CONTEXT_KEY
     try {
       const { data } = await axios.get(
-        'https://contextualwebsearch-websearch-v1.p.rapidapi.com/api/Search/WebSearchAPI',
+        'https://www.googleapis.com/customsearch/v1',
         {
           params: {
             q: input,
-            pageNumber: '1',
-            pageSize: '10',
-            autoCorrect: 'true',
-          },
-          headers: {
-            'X-RapidAPI-Key': process.env.RAPID_API_KEY,
-            // Might need to change this
-            'X-RapidAPI-Host':
-              'contextualwebsearch-websearch-v1.p.rapidapi.com',
+            key,
+            cx,
           },
         }
       )
-      return data as WebSearchData
+      type Item = {
+        title: string
+        link: string
+      }
+      type Results = {
+        items: Item[]
+      }
+
+      return data as Results
     } catch (error) {
       if (error instanceof Error) {
-        throw error
+        const { message } = error
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message,
+          cause: error,
+        })
       }
       console.error(error)
     }
