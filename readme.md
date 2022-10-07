@@ -1,6 +1,6 @@
 # SML Search
 
-A simple search engine.
+A simple search engine
 
 # Tech stack
 
