@@ -1,5 +1,6 @@
 import type { AppRouter } from 'pages/api/trpc/[trpc]'
 import type { inferProcedureOutput } from '@trpc/server'
+import ErrorComponent from './Error'
 
 type Results = inferProcedureOutput<AppRouter['search']>
 
@@ -15,7 +16,13 @@ const ResultArea = ({
   query: string
 }) => {
   if (error instanceof Error) {
-    return <p>Error: {error.message}</p>
+    if (error.message.includes('429')) {
+      return (
+        <ErrorComponent message='Could not fetch. Google Custom Search API provides only 100 search queries per day for free. Please try again tomorrow or next week. 😆' />
+      )
+    } else {
+      return <ErrorComponent message={error.message} />
+    }
   }
   if (isFetching) {
     return <p>Fetching results...</p>
