@@ -1,6 +1,5 @@
 import type { AppRouter } from 'pages/api/trpc/[trpc]'
 import type { inferProcedureOutput } from '@trpc/server'
-import axios from 'axios'
 
 type Results = inferProcedureOutput<AppRouter['search']>
 
@@ -15,8 +14,7 @@ const ResultArea = ({
   results: Results
   query: string
 }) => {
-  if (axios.isAxiosError(error)) {
-    console.error(error)
+  if (error instanceof Error) {
     return <p>Error: {error.message}</p>
   }
   if (isFetching) {

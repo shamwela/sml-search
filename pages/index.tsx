@@ -20,13 +20,14 @@ const Home = () => {
     <>
       {/* Add Head here later */}
       <main>
-        <div className='w-96 mx-auto flex flex-col gap-y-4'>
-          <form onSubmit={submitHandler} className='w-full flex'>
+        <div className='mx-auto w-full md:max-w-md flex flex-col gap-y-4'>
+          <form onSubmit={submitHandler} className='flex'>
             <input
               name='query'
               aria-label='Your search query'
               value={query}
               onChange={(event) => setQuery(event.target.value)}
+              className='w-full'
               type='search'
               required
             />

@@ -35,7 +35,7 @@ export const appRouter = t.router({
 
       return results
     } catch (error) {
-      if (axios.isAxiosError(error)) {
+      if (error instanceof Error) {
         throw error
       }
       console.error(error)
