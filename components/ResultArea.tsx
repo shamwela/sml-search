@@ -27,15 +27,13 @@ const ResultArea = ({
     return <p>No results found for {query}.</p>
   }
   return (
-    <>
+    <div className='flex flex-col gap-y-4'>
       {results.items.map(({ title, link }) => (
-        <div key={link}>
-          <a href={link} target='_blank' rel='noreferrer'>
-            {title}
-          </a>
-        </div>
+        <a href={link} key={link} target='_blank' rel='noreferrer'>
+          {title}
+        </a>
       ))}
-    </>
+    </div>
   )
 }
 

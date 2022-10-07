@@ -5,18 +5,14 @@ import { trpc } from 'utilities/trpc'
 const Home = () => {
   const [query, setQuery] = useState('')
   const { error, isFetching, refetch, data } = trpc.search.useQuery(query, {
-    refetchOnWindowFocus: false,
-    enabled: false, // Disable this query from automatically running
+    // Don't automatically query
+    enabled: false,
   })
   const results = data
 
   const submitHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const { elements } = event.currentTarget
-    const query = (elements.namedItem('query') as HTMLInputElement).value
-      .trim()
-      .toLowerCase()
-    setQuery(query)
+    // Refetch only on submit
     refetch()
   }
 
@@ -24,18 +20,26 @@ const Home = () => {
     <>
       {/* Add Head here later */}
       <main>
-        <form onSubmit={submitHandler}>
-          <input type='search' name='query' id='query' />
-          <button type='submit'>Search</button>
-        </form>
-
-        <div>
-          <ResultArea
-            error={error}
-            isFetching={isFetching}
-            results={results}
-            query={query}
-          />
+        <div className='w-96 mx-auto flex flex-col gap-y-4'>
+          <form onSubmit={submitHandler} className='w-full flex'>
+            <input
+              name='query'
+              aria-label='Your search query'
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              type='search'
+              required
+            />
+            <button type='submit'>Search</button>
+          </form>
+          <div>
+            <ResultArea
+              error={error}
+              isFetching={isFetching}
+              results={results}
+              query={query}
+            />
+          </div>
         </div>
       </main>
     </>
