@@ -1,45 +1,27 @@
-import axios from 'axios'
 import { FormEvent, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-
-type SearchValue = {
-  title: string
-  webpageUrl: string
-}
-
-type WebSearchData = {
-  value: SearchValue[]
-}
+import { trpc } from 'utilities/trpc'
 
 const Home = () => {
   const [query, setQuery] = useState('')
-  const { error, isLoading, isSuccess, data } = useQuery(
-    ['results', query],
-    async ({ queryKey }) => {
-      const query = queryKey[1]
-      const { data } = await axios.get('/api/search', {
-        params: { query },
-      })
-      return data as WebSearchData
-    }
-  )
+  const { error, isFetching, refetch, data } = trpc.search.useQuery(query, {
+    refetchOnWindowFocus: false,
+    enabled: false, // Disable this query from automatically running
+  })
+  const submitHandler = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const { elements } = event.currentTarget
+    const query = (elements.namedItem('query') as HTMLInputElement).value
+      .trim()
+      .toLowerCase()
+    setQuery(query)
+    refetch()
+  }
 
   return (
     <>
       {/* Add Head here later */}
       <main>
-        <form
-          onSubmit={(event) => {
-            event.preventDefault()
-            const { elements } = event.currentTarget
-            const query = (
-              elements.namedItem('query') as HTMLInputElement
-            ).value
-              .trim()
-              .toLowerCase()
-            setQuery(query)
-          }}
-        >
+        <form onSubmit={submitHandler}>
           <input type='search' name='query' id='query' />
           <button type='submit'>Search</button>
         </form>
@@ -47,13 +29,14 @@ const Home = () => {
         <div>
           {error instanceof Error ? (
             <p>Error: {error.message}</p>
-          ) : isLoading ? (
+          ) : isFetching ? (
             <p>Loading...</p>
+          ) : data?.value.length === 0 ? (
+            <p>No results found for {query}.</p>
           ) : (
-            isSuccess &&
-            data.value.map(({ title, webpageUrl }) => (
-              <div key={webpageUrl}>
-                <a href={webpageUrl} target='_blank' rel='noreferrer'>
+            data?.value.map(({ id, title, url }) => (
+              <div key={id}>
+                <a href={url} target='_blank' rel='noreferrer'>
                   {title}
                 </a>
               </div>
