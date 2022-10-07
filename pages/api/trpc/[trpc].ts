@@ -35,13 +35,8 @@ export const appRouter = t.router({
 
       return results
     } catch (error) {
-      if (error instanceof Error) {
-        const { message } = error
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message,
-          cause: error,
-        })
+      if (axios.isAxiosError(error)) {
+        throw error
       }
       console.error(error)
     }
