@@ -20,15 +20,20 @@ export const appRouter = t.router({
           },
         }
       )
-      type Item = {
+      if (!data.items) {
+        return []
+      }
+      type Result = {
         title: string
         link: string
       }
-      type Results = {
-        items?: Item[]
-      }
+      // Trim data to reduce size
+      const results: Result[] = data.items.map(({ title, link }: any) => ({
+        title,
+        link,
+      }))
 
-      return data as Results
+      return results
     } catch (error) {
       if (error instanceof Error) {
         const { message } = error
