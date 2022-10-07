@@ -9,3 +9,4 @@ A simple search engine
 - TypeScript
 - React Query
 - tRPC
+- Google Custom Search JSON API
