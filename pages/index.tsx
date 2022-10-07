@@ -20,6 +20,7 @@ const Home = () => {
     <>
       {/* Add Head here later */}
       <main>
+        <h1>SML Search</h1>
         <div className='mx-auto w-full md:max-w-md flex flex-col gap-y-4'>
           <form onSubmit={submitHandler} className='flex'>
             <input
@@ -29,6 +30,7 @@ const Home = () => {
               onChange={(event) => setQuery(event.target.value)}
               className='w-full'
               type='search'
+              autoComplete='off'
               required
             />
             <button type='submit'>Search</button>

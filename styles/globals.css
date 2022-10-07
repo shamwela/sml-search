@@ -7,16 +7,25 @@
 }
 
 main {
-  @apply min-h-screen flex p-8;
+  @apply min-h-screen flex flex-col p-8 gap-y-4;
+}
+
+h1 {
+  @apply font-semibold text-3xl text-center;
+}
+
+input,
+[type='submit'] {
+  @apply py-2 px-4;
 }
 
 input {
-  @apply bg-gray-400 p-2;
+  @apply bg-gray-400;
 }
 
 button,
 [type='submit'] {
-  @apply bg-blue-400 p-2;
+  @apply bg-blue-600 text-white;
 }
 
 a {
