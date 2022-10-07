@@ -25,7 +25,7 @@ export const appRouter = t.router({
         link: string
       }
       type Results = {
-        items: Item[]
+        items?: Item[]
       }
 
       return data as Results
