@@ -1,6 +1,7 @@
 import ResultArea from 'components/ResultArea'
 import { FormEvent, useState } from 'react'
 import { trpc } from 'utilities/trpc'
+import Head from 'components/Head'
 
 const Home = () => {
   const [query, setQuery] = useState('')
@@ -18,7 +19,7 @@ const Home = () => {
 
   return (
     <>
-      {/* Add Head here later */}
+      <Head title='SML Search' description='Search anything online' />
       <main>
         <h1>SML Search</h1>
         <div className='mx-auto w-full md:max-w-md flex flex-col gap-y-4'>
